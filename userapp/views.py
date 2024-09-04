@@ -38,66 +38,55 @@ def searchBooks(request):
     return render(request,'user/usersearch.html',{'books':books,'query':query})
 
 
-def add_to_cart(request,book_id):
-    book = Book.objects.get(id=book_id)
-    login_user = loginTable.objects.get(username=request.user.username)
-    if book.quantity>0:
-        #create cart for the specific user
-        cart, created = Cart.objects.get_or_create(user=login_user)
-        #for cart item
-        cart_item,item_created = CartItem.objects.get_or_create(cart=cart,book=book)
+def add_to_cart(request, book_id):
+    # Fetch the book object; handle the case where it does not exist
+    book = get_object_or_404(Book, id=book_id)
+    
+    # Retrieve the logged-in user from your custom login model (not request.user)
+    username = request.session.get('username')  # Use session data to get the username
+    login_user = get_object_or_404(loginTable, username=username)
 
+    # Ensure the book has sufficient quantity before adding to the cart
+    if book.quantity > 0:
+        # Create a cart for the specific user if not exists
+        cart, created = Cart.objects.get_or_create(user=login_user)
+
+        # Get or create a cart item for the specific book
+        cart_item, item_created = CartItem.objects.get_or_create(cart=cart, book=book)
+
+        # Increase quantity if item already exists
         if not item_created:
-            cart_item.quantity+=1
+            if cart_item.quantity < book.quantity:  # Ensure we don't exceed available stock
+                cart_item.quantity += 1
+                cart_item.save()
+            else:
+                messages.error(request, 'Not enough stock available.')
+        else:
             cart_item.save()
+
     return redirect('viewcartuser')
 
-
-@login_required
 def view_cart_user(request):
-    with transaction.atomic():
-        login_user, created = loginTable.objects.get_or_create(
-        username=request.user.username,
-        defaults={
-            'password': request.user.password,
-            'cpassword': request.user.password,
-            'type': 'user'
-        }
-        )
-        cart,created = Cart.objects.get_or_create(user=login_user)
-    # This line fetches all CartItem objects associated with the specific cart instance and stores them in the cart_items variable.
-    #this line retrieve all items related to a specific cart
+    # Retrieve the logged-in user from session (since custom auth is used)
+    username = request.session.get('username')  # Fetch username from session
+    if not username:
+        return redirect('login')  # Redirect to login if no user in session
+
+    # Fetch the logged-in user from the custom login model
+    login_user = get_object_or_404(loginTable, username=username)
+
+    # Get or create a cart for the user
+    cart, created = Cart.objects.get_or_create(user=login_user)
+
+    # Fetch all items associated with the cart
     cart_items = cart.cartitem_set.all()
-    #retrieves all items from cartitem regardless of which cart they belong to
-    cart_item = CartItem.objects.all()
-    total_price = sum(item.quantity * item.book.price  for item in cart_items)
+
+    # Calculate total price and total items
+    total_price = sum(item.quantity * item.book.price for item in cart_items)
     total_items = cart_items.count()
 
-    return render(request,'user/usercart.html',{'cart_items':cart_items,'cart_item':cart_item,'total_price':total_price,'total_items':total_items})
+    return render(request, 'user/usercart.html', {'cart_items': cart_items, 'total_price': total_price, 'total_items': total_items})
 
-
-def view_cart_admin(request):
-    try:
-        # Fetch the current user from the loginTable
-        login_user = loginTable.objects.get(username=request.user.username)
-        
-        
-        # Use the fetched user to get or create a cart
-        cart, created = Cart.objects.get_or_create(user=login_user)
-        
-    except loginTable.DoesNotExist:
-        messages.error(request, "User entry not found in loginTable.")
-        return redirect('login')  # Redirect to login or another appropriate page
-
-    # This line fetches all CartItem objects associated with the specific cart instance and stores them in the cart_items variable.
-    #this line retrieve all items related to a specific cart
-    cart_items = cart.cartitem_set.all()
-    #retrieves all items from cartitem regardless of which cart they belong to
-    cart_item = CartItem.objects.all()
-    total_price = sum(item.quantity * item.book.price  for item in cart_items)
-    total_items = cart_items.count()
-
-    return render(request,'admin_file/admincart.html',{'cart_items':cart_items,'cart_item':cart_item,'total_price':total_price,'total_items':total_items})
 
 def increase_quantity(request,item_id):
     cart_item = CartItem.objects.get(id=item_id)
