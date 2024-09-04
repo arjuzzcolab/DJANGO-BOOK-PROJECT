@@ -7,7 +7,7 @@ urlpatterns = [
     path('usersearch/',views.searchBooks,name='usersearch'),
     path('add_cart/<int:book_id>/',views.add_to_cart,name='add_cart'),
     path('view_cart_user/',views.view_cart_user,name='viewcartuser'),
-    path('view_cart_admin/',views.view_cart_admin,name='viewcartadmin'),
+  
     path('increase_item/<int:item_id>/',views.increase_quantity,name='increase_quantity'),
      path('decrease_item/<int:item_id>/',views.decrease_quantity,name='decrease_quantity'),
       path('remove_item/<int:item_id>/',views.remove_from_cart,name='remove_item'),
