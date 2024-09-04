@@ -1,0 +1,135 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/mdi/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/ti-icons/css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/css/vendor.bundle.base.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/font-awesome/css/font-awesome.min.css' %}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/font-awesome/css/font-awesome.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css' %}">
+    <!-- End plugin css for this page -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{% static 'assets/images/title_icon.png' %}" />
+    <title>Book Collection</title>
+  </head>
+  <body>
+    
+      <!-- partial:partials/_navbar.html -->
+      <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
+          <a class="navbar-brand brand-logo" href="{% url 'userlist' %}" style="color: purple;font-weight: 1000;font-size: 24px;"><img src="{% static 'assets/images/title_icon.png' %}" style="width: 30px;height: 35px;" alt="logo" />Book Collection</a>
+          <a class="navbar-brand brand-logo-mini" href="index.html"><img src="{% static 'assets/images/logo-mini.svg' %}" alt="logo" /></a>
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-stretch">
+          
+          <div class="search-field d-none d-md-block">
+            <form class="d-flex align-items-center h-100" method="get" action="{% url 'search' %}">
+              <div class="input-group">
+                <div class="input-group-prepend bg-transparent">
+                  <i class="input-group-text border-0 mdi mdi-magnify"></i>
+                </div>
+                <input type="text" name="q" class="form-control bg-transparent border-0" placeholder="Search projects">
+              </div>
+            </form>
+          </div>
+          
+        <a class="btn btn-primary mt-2 " href="{% url 'create' %}" style="height: 50px;margin-left: 100px;font-size: 20px;">Create Book</a>
+          
+          
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 " >
+
+          
+        <li class="nav-item" style="margin-right: 15px;">
+            <a href="{% url 'logout' %}" class="btn btn-danger" style="font-size: 15px;color: black;">Logout</a>
+        </li>
+          <li class="nav-item">
+              <a href="{% url 'viewcartadmin' %}" class="btn btn-warning" style="font-size: 20px;">View Cart</a>
+          </li>
+      </ul>
+
+             
+            
+            
+         
+        </div>
+      </nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_sidebar.html -->
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+          <ul class="nav">
+            
+           
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'lists' %}">
+                <span class="menu-title">Dashboard</span>
+                <i class="mdi mdi-home menu-icon"></i>
+              </a>
+            </li>
+           
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="collapse" href="{% url 'viewcartadmin' %}" aria-expanded="false" aria-controls="icons">
+                <span class="menu-title">Cart</span>
+                <i class="fa-solid fa-cart-shopping menu-icon"></i>
+              </a>
+             
+            </li>
+           
+            
+          </ul>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title">
+                <span class="page-title-icon bg-gradient-primary text-white me-2">
+                  <i class="mdi mdi-home"></i>
+                </span> Dashboard
+              </h3>
+              
+            </div>
+            {% block content %}
+            {% endblock %}
+            
+          <!-- content-wrapper ends -->
+          
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="assets/vendors/chart.js/chart.umd.js"></script>
+    <script src="assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="assets/js/off-canvas.js"></script>
+    <script src="assets/js/misc.js"></script>
+    <script src="assets/js/settings.js"></script>
+    <script src="assets/js/todolist.js"></script>
+    <script src="assets/js/jquery.cookie.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="assets/js/dashboard.js"></script>
+    <!-- End custom js for this page -->
+  </body>
+</html>

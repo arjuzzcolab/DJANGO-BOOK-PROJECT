@@ -1,0 +1,12 @@
+{% extends 'admin_file/index.html' %}
+{% load static %}
+{% block content %}
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_p}}
+          
+          <button type="submit" class="btn btn-primary" value="Update">Submit</button>
+      
+
+    </form>
+    {% endblock %}
