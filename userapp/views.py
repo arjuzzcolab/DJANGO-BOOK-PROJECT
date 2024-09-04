@@ -1,11 +1,9 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .models import Book
 from django.core.paginator import Paginator,EmptyPage
-from django.contrib.auth.decorators import login_required
 from accounts.models import loginTable
 from django.db.models import Q
 from .models import Cart,CartItem
-from django.db import transaction
 import stripe
 from django.conf import settings
 from django.urls import reverse
